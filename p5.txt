@@ -116,35 +116,57 @@ Se ha capturado una sesión SIP (archivo sip.cap.gz), que se puede abrir con Wir
 
 12. Vamos a ver más a fondo el intercambio RTP. En Telephony hay una opción RTP. Empecemos mirando los flujos RTP.
  ** ¿Cuántos flujos hay? ¿por qué?
+ 	Dos. Uno para el protocolo RTP y otro para H261
  ** ¿Cuántos paquetes se pierden?
+ 	No hay perdidas
  ** ¿Cuál es el valor máximo del delta? ¿Y qué es lo que significa el valor de delta?
+ 	1290.479 ms. Retardo de un paquete respecto al anterior
  ** ¿Cuáles son los valores de jitter (medio y máximo)? ¿Qué quiere decir eso? ¿Estamos ante una conversación de calidad?
+ 	RTP: Jitter_Max = 183.096 ms; Jitter_Mean = 153.240 ms 
+ 	H.261: Max = 119.635 ms; Mean = 42.500
+ 	Son valores bajos por lo tanto sí
+ 	El Jitter es la fluctuación entre el tiempo de llegada de los paquetes 
 
 
 13. Elige un paquete RTP de audio. Analiza el flujo de audio en Telephony -> RTP -> Stream Analysis.
  ** ¿Cuánto valen el delta y el jitter para el primer paquete que ha llegado?
+ 	Cero para ambos
  ** ¿Podemos saber si éste es el primer paquete que nos han enviado?
+ 	Este valor indica que no hubo ningún paquete anterior, debido a lo que nos indican delta y 		jitter
  ** Los valores de jitter son menores de 10ms hasta un paquete dado. ¿Cuál?
+ 	Hasta el paquete 247
  ** ¿A qué se debe el cambio tan brusco del jitter?
+ 	Congestión de los routers, cambios en la red, las razón no podemos conocerla con seguridad
  ** ¿Es comparable este cambio con el tiempo desde la recepción del paquete anterior? ¿Por qué?
  ** ¿Cuál es la dependencia entre el tiempo transcurrido desde el paquete anterior y el valor de jitter?
+ 	Directamente proporcional, a mayor retardo se producen picos de jitter que con el tiempo 		van bajando
 
 
 14. En Telephony selecciona el menú VoIP calls. Verás que se lista la llamada de voz IP capturada en una ventana emergente. Selecciona esa llamada y pulsa el botón Graph.
  ** ¿Cuánto dura la conversación?
+ 	24.80289 ms
  ** ¿Cuáles son sus SSRC? ¿Por qué hay varios SSRCs? ¿Hay CSRCs?
+ 	Para g711A ----- SSRC 0xbf4a1d37
+ 	Para h261 ------ SSRC 0x43306582
+ 	No hay CSRCs
 
 
 15. Identifica la trama donde se finaliza la conversación.
  ** ¿Qué método SIP se utiliza?
+ 	Bye
  ** ¿En qué trama(s)?
+ 	924, 925, 927 y 933
  ** ¿Por qué crees que se envía varias veces?
+ 	UDP no es un prótocolo que proporcione fiabilidad por lo que se realizan varios intentos 		hasta recibir una respuesta OK
 
 
 16. Finalmente, se cierra la aplicación de VozIP.
  ** ¿Por qué aparece una instrucción SIP del tipo REGISTER?
+ 	Porque el UA se da de baja mediante esta.
  ** ¿En qué trama sucede esto?
+ 	950 y 952
  ** ¿En qué se diferencia con la instrucción que se utilizó con anterioridad (al principio de la sesión)?
+ 	La cabecera expires se pone a 0, como vimos en las prácticas esto se utiliza para darse de 		baja.
 
 
 
